@@ -1,21 +1,15 @@
 require 'spec_helper'
 
 class User < ActiveRecord::Base
-  include HStoreFlags
-
   hstore_flags :fighter, :lover
 end
 
 class UserNoScopes < ActiveRecord::Base
-  include HStoreFlags
-
   self.table_name = "users"
   hstore_flags :fighter, :lover, :referee, scopes: false
 end
 
 class UserMultiFlags < ActiveRecord::Base
-  include HStoreFlags
-
   hstore_flags :fighter, :lover, :referee
   hstore_flags :drinker, :smoker, :bartender, field: "more_flags"
 end

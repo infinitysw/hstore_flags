@@ -1,6 +1,4 @@
 require 'hstore_flags/version'
-require 'active_support'
-require 'active_support/version'
 require 'activerecord-postgres-hstore'
 
 module HStoreFlags
@@ -37,3 +35,5 @@ module HStoreFlags
     end
   end
 end
+
+ActiveRecord::Base.send(:include, HStoreFlags)
