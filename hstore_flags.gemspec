@@ -12,5 +12,9 @@ Gem::Specification.new do |s|
   s.license       = "MIT"
   s.require_paths = ["lib"]
 
+  s.add_dependency "rails", "~> 3.0"
   s.add_dependency "activerecord-postgres-hstore", "~> 0.4"
+
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "pg"
 end
