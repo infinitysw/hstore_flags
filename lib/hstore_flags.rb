@@ -12,7 +12,7 @@ module HStoreFlags
     protected
     def set_hstore_flag_field(field, flag, value)
       if TRUE_VALUES.include?(value)
-        self[field] = (self[field] || {}).merge({flag => true})
+        self[field] = (self[field] || {}).merge({flag.to_s => true.to_s})
       else
         self.destroy_keys(field, flag)
       end
