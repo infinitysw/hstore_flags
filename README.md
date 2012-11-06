@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 end
 
 class Group < ActiveRecord::Base
-  hstore_flags :active, :public, invite_only, scopes: false
+  hstore_flags :active, :public, :invite_only, scopes: false
 end
 
 # setting flags
