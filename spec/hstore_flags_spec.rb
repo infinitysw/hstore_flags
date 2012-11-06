@@ -47,4 +47,13 @@ describe HStoreFlags do
     UserMultiFlags.drinker.to_sql.should =~ /defined\(more_flags, 'drinker'\) IS TRUE/
     UserMultiFlags.not_drinker.to_sql.should =~ /defined\(more_flags, 'drinker'\) IS NOT TRUE/
   end
+
+  it "updates changes with new bit values" do
+    u = User.new
+    u.changes[:fighter].should be_nil
+    u.fighter = true
+    u.changes[:fighter].should == [false, true]
+    u.fighter = false
+    u.changes[:fighter].should == [true, false] # this is wrong, it should disappear
+  end
 end
