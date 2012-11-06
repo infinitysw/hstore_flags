@@ -18,42 +18,42 @@ end
 describe HStoreFlags do
   it "creates accessors for flags" do
     u = User.new(fighter: true)
-    u.fighter.should  == true
-    u.fighter?.should == true
-    u.lover.should    == false
-    u.lover?.should   == false
+    expect(u.fighter).to eq(true)
+    expect(u.fighter?).to eq(true)
+    expect(u.lover).to eq(false)
+    expect(u.lover?).to eq(false)
   end
 
   it "creates scopes without scopes: false" do
-    User.should respond_to(:fighter)
-    User.should respond_to(:not_fighter)
-    User.should respond_to(:lover)
-    User.should respond_to(:not_lover)
+    expect(User).to respond_to(:fighter)
+    expect(User).to respond_to(:not_fighter)
+    expect(User).to respond_to(:lover)
+    expect(User).to respond_to(:not_lover)
   end
 
   it "does not create scopes with scopes: false" do
-    UserNoScopes.should_not respond_to(:fighter)
-    UserNoScopes.should_not respond_to(:not_fighter)
-    UserNoScopes.should_not respond_to(:lover)
-    UserNoScopes.should_not respond_to(:not_lover)
+    expect(UserNoScopes).not_to respond_to(:fighter)
+    expect(UserNoScopes).not_to respond_to(:not_fighter)
+    expect(UserNoScopes).not_to respond_to(:lover)
+    expect(UserNoScopes).not_to respond_to(:not_lover)
   end
 
   it "creates proper scopes when no field is defined" do
-    User.fighter.to_sql.should =~ /defined\(flags, 'fighter'\) IS TRUE/
-    User.not_fighter.to_sql.should =~ /defined\(flags, 'fighter'\) IS NOT TRUE/
+    expect(User.fighter.to_sql).to match(/defined\(flags, 'fighter'\) IS TRUE/)
+    expect(User.not_fighter.to_sql).to match(/defined\(flags, 'fighter'\) IS NOT TRUE/)
   end
 
   it "creates proper scopes when field is defined" do
-    UserMultiFlags.drinker.to_sql.should =~ /defined\(more_flags, 'drinker'\) IS TRUE/
-    UserMultiFlags.not_drinker.to_sql.should =~ /defined\(more_flags, 'drinker'\) IS NOT TRUE/
+    expect(UserMultiFlags.drinker.to_sql).to match(/defined\(more_flags, 'drinker'\) IS TRUE/)
+    expect(UserMultiFlags.not_drinker.to_sql).to match(/defined\(more_flags, 'drinker'\) IS NOT TRUE/)
   end
 
   it "updates changes with new bit values" do
     u = User.new
-    u.changes[:fighter].should be_nil
+    expect(u.changes[:fighter]).to eq(nil)
     u.fighter = true
-    u.changes[:fighter].should == [false, true]
+    expect(u.changes[:fighter]).to eq([false, true])
     u.fighter = false
-    u.changes[:fighter].should == [true, false] # this is wrong, it should disappear
+    expect(u.changes[:fighter]).to eq([true, false]) # this is wrong, it should disappear
   end
 end
