@@ -35,7 +35,7 @@ u.vendor = false
 
 # automatic scope creation
 User.active.to_sql        #=> SELECT * FROM users WHERE (defined(flags, 'active') IS TRUE)
-User.not_drop_ship.to_sql #=> select * FROM users WHERE (defined(user_type, 'drop_ship') IS NOT TRUE)
+User.not_drop_ship.to_sql #=> SELECT * FROM users WHERE (defined(user_type, 'drop_ship') IS NOT TRUE)
 ```
 
 * `field` option defaults to `flags`
