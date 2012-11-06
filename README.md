@@ -6,7 +6,8 @@ integer/bit flags aggrevating you? try this.
 Requirements
 ------------
 
-* Postgresql 8.4+ with contrib and rails 3
+* Rails 3.0 or greater
+* Postgresql 8.4+ with contrib package
 * Read [activerecord-postgres-hstore](https://raw.github.com/engageis/activerecord-postgres-hstore) for index creation
 
 Installation
