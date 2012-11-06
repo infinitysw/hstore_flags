@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    hstore_flags (0.0.0)
+    hstore_flags (0.0.1)
+      activerecord (~> 3.0)
       activerecord-postgres-hstore (~> 0.4)
-      rails (~> 3.0)
 
 GEM
   remote: http://rubygems.org/
@@ -103,9 +103,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord (~> 3.0)
   activerecord-postgres-hstore (~> 0.4)
   hstore_flags!
   pg (~> 0.14)
-  rails (~> 3.0)
   rake
   rspec (~> 2)
