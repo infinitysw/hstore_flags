@@ -10,11 +10,21 @@ module HStoreFlags
 
     protected
     def set_hstore_flag_field(field, flag, value)
-      if TRUE_VALUES.include?(value)
+      new_val = TRUE_VALUES.include?(value)
+      old_val = self.send(flag)
+      return if new_val == old_val
+
+      if defined? changed_attributes
+        send(:changed_attributes).merge!(flag.to_s => old_val)
+      end
+
+      if new_val
         self[field] = (self[field] || {}).merge({flag.to_s => true.to_s})
       else
-        self.destroy_keys(field, flag)
+        destroy_key(field, flag)
       end
+
+      new_val
     end
   end
 
