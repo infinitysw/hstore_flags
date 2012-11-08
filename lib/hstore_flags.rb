@@ -31,7 +31,7 @@ module HStoreFlags
   module ClassMethods
     def hstore_flags(*args)
       opts  = args.last.is_a?(Hash) ? args.pop.dup : {}
-      field = opts[:field] || "flags"
+      field = "#{self.table_name}." + (opts[:field] || "flags")
 
       args.each do |flag|
         define_method("#{flag}")  {(self[field] || {})[flag.to_s] == "true"}
