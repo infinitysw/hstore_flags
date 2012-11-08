@@ -41,6 +41,16 @@ module HStoreFlags
         unless opts[:scopes] == false
           scope "#{flag}",     where("defined(#{field}, '#{flag}') IS TRUE")
           scope "not_#{flag}", where("defined(#{field}, '#{flag}') IS NOT TRUE")
+
+          class_eval <<-EVAL
+            def self.#{flag}_condition
+              "(defined(#{field}, '#{flag}') IS TRUE)"
+            end
+
+            def self.not_#{flag}_condition
+              "(defined(#{field}, '#{flag}') IS NOT TRUE)"
+            end
+          EVAL
         end
       end
     end
