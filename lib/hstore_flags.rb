@@ -30,7 +30,8 @@ module HStoreFlags
   module ClassMethods
     def hstore_flags(*args)
       opts  = args.last.is_a?(Hash) ? args.pop.dup : {}
-      field = "#{self.table_name}." + (opts[:field] || "flags")
+      field = opts[:field] || "flags"
+      table_field = "#{self.table_name}." + field
 
       args.each do |flag|
         define_method("#{flag}")  {(self[field] || {})[flag.to_s] == "true"}
@@ -38,16 +39,16 @@ module HStoreFlags
         define_method("#{flag}=") {|val| set_hstore_flag_field(field, flag, val)}
 
         unless opts[:scopes] == false
-          scope "#{flag}",     where("defined(#{field}, '#{flag}') IS TRUE")
-          scope "not_#{flag}", where("defined(#{field}, '#{flag}') IS NOT TRUE")
+          scope "#{flag}",     where("defined(#{table_field}, '#{flag}') IS TRUE")
+          scope "not_#{flag}", where("defined(#{table_field}, '#{flag}') IS NOT TRUE")
 
           class_eval <<-EVAL
             def self.#{flag}_condition
-              "(defined(#{field}, '#{flag}') IS TRUE)"
+              "(defined(#{table_field}, '#{flag}') IS TRUE)"
             end
 
             def self.not_#{flag}_condition
-              "(defined(#{field}, '#{flag}') IS NOT TRUE)"
+              "(defined(#{table_field}, '#{flag}') IS NOT TRUE)"
             end
           EVAL
         end
