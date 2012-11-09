@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hstore_flags (0.0.2)
+    hstore_flags (0.0.3)
       activerecord (~> 3.0)
       activerecord-postgres-hstore (~> 0.4)
 
