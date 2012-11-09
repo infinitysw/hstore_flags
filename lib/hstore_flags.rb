@@ -1,6 +1,5 @@
 require 'hstore_flags/version'
 require 'activerecord-postgres-hstore'
-require 'activerecord-postgres-hstore/activerecord'
 
 module HStoreFlags
   TRUE_VALUES = [true, 1, '1', 't', 'T', 'true', 'TRUE']
