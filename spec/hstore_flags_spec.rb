@@ -39,13 +39,13 @@ describe HStoreFlags do
   end
 
   it "creates proper scopes when no field is defined" do
-    expect(User.fighter.to_sql).to match(/defined\(flags, 'fighter'\) IS TRUE/)
-    expect(User.not_fighter.to_sql).to match(/defined\(flags, 'fighter'\) IS NOT TRUE/)
+    expect(User.fighter.to_sql).to match(/defined\(users.flags, 'fighter'\) IS TRUE/)
+    expect(User.not_fighter.to_sql).to match(/defined\(users.flags, 'fighter'\) IS NOT TRUE/)
   end
 
   it "creates proper scopes when field is defined" do
-    expect(UserMultiFlags.drinker.to_sql).to match(/defined\(more_flags, 'drinker'\) IS TRUE/)
-    expect(UserMultiFlags.not_drinker.to_sql).to match(/defined\(more_flags, 'drinker'\) IS NOT TRUE/)
+    expect(UserMultiFlags.drinker.to_sql).to match(/defined\(users.more_flags, 'drinker'\) IS TRUE/)
+    expect(UserMultiFlags.not_drinker.to_sql).to match(/defined\(users.more_flags, 'drinker'\) IS NOT TRUE/)
   end
 
   it "updates changes with new bit values" do
