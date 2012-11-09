@@ -20,9 +20,9 @@ module HStoreFlags
       if new_val
         self[field] = (self[field] || {}).merge({flag.to_s => true.to_s})
       else
-        destroy_key(field, flag)
+        (self[field] || {}).delete(flag.to_s)
       end
-
+      send("#{field}_will_change!")
       new_val
     end
   end
