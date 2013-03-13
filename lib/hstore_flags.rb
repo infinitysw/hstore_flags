@@ -35,6 +35,8 @@ module HStoreFlags
       field = opts[:field] || "flags"
       table_field = "#{self.table_name}." + field
 
+      serialize field, ActiveRecord::Coders::Hstore
+
       args.each do |flag|
         define_method("#{flag}")  {(self[field] || {})[flag.to_s] == "true"}
         define_method("#{flag}?") {(self[field] || {})[flag.to_s] == "true"}
