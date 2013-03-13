@@ -1,3 +1,3 @@
 module HStoreFlags
-  Version = VERSION = "0.0.4"
+  Version = VERSION = "0.1.0"
 end
