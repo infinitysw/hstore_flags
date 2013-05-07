@@ -22,6 +22,10 @@ describe HStoreFlags do
     expect(u.fighter?).to eq(true)
     expect(u.lover).to eq(false)
     expect(u.lover?).to eq(false)
+    expect(u.not_fighter).to eq(false)
+    expect(u.not_fighter?).to eq(false)
+    expect(u.not_lover).to eq(true)
+    expect(u.not_lover?).to eq(true)
   end
 
   it "creates scopes without scopes: false" do

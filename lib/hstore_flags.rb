@@ -38,9 +38,11 @@ module HStoreFlags
       serialize field, ActiveRecord::Coders::Hstore
 
       args.each do |flag|
-        define_method("#{flag}")  {(self[field] || {})[flag.to_s] == "true"}
-        define_method("#{flag}?") {(self[field] || {})[flag.to_s] == "true"}
-        define_method("#{flag}=") {|val| set_hstore_flag_field(field, flag, val)}
+        define_method("#{flag}")      {(self[field] || {})[flag.to_s] == "true"}
+        define_method("#{flag}?")     {(self[field] || {})[flag.to_s] == "true"}
+        define_method("not_#{flag}")  {(self[field] || {})[flag.to_s] != "true"}
+        define_method("not_#{flag}?") {(self[field] || {})[flag.to_s] != "true"}
+        define_method("#{flag}=")     {|val| set_hstore_flag_field(field, flag, val)}
 
         unless opts[:scopes] == false
           scope "#{flag}",     where("defined(#{table_field}, '#{flag}') IS TRUE")
