@@ -1,52 +1,48 @@
 require 'hstore_flags/version'
-require 'activerecord-postgres-hstore'
 
 module HStoreFlags
+  extend ActiveSupport::Concern
   TRUE_VALUES = [true, 1, '1', 't', 'T', 'true', 'TRUE']
+  STORED_TRUE_VALUE = 'true'
 
-  def self.included(base)
-    base.extend(ClassMethods)
+  private
 
-    protected
-    def set_hstore_flag_field(field, flag, value)
-      new_val = TRUE_VALUES.include?(value)
-      old_val = self.send(flag)
-      return if new_val == old_val
+  def set_hstore_flag_field(field, flag, value)
+    new_val = TRUE_VALUES.include?(value)
+    old_val = send(flag)
+    return if new_val == old_val
 
-      if defined? changed_attributes
-        send(:changed_attributes).merge!(flag.to_s => old_val)
-      end
-
-      if new_val
-        self[field] = (self[field] || {}).merge({flag.to_s => true.to_s})
-      else
-        field_flags = self[field] || {}
-        field_flags.delete(flag.to_s)
-        self[field] = field_flags
-      end
-      send("#{field}_will_change!")
-      new_val
+    send("#{field}_will_change!")
+    if defined? changed_attributes
+      send(:changed_attributes).merge!(flag.to_s => old_val)
     end
+    fields = self[field] || {}
+
+    if new_val
+      self[field] = fields.merge(flag.to_s => STORED_TRUE_VALUE)
+    else
+      fields.delete(flag.to_s)
+      self[field] = fields
+    end
+    new_val
   end
 
   module ClassMethods
     def hstore_flags(*args)
-      opts  = args.last.is_a?(Hash) ? args.pop.dup : {}
+      opts  = args.extract_options!
       field = opts[:field] || "flags"
       table_field = "#{self.table_name}." + field
 
-      serialize field, ActiveRecord::Coders::Hstore
-
       args.each do |flag|
-        define_method("#{flag}")      {(self[field] || {})[flag.to_s] == "true"}
-        define_method("#{flag}?")     {(self[field] || {})[flag.to_s] == "true"}
-        define_method("not_#{flag}")  {(self[field] || {})[flag.to_s] != "true"}
-        define_method("not_#{flag}?") {(self[field] || {})[flag.to_s] != "true"}
+        define_method("#{flag}")      {(self[field] || {})[flag.to_s] == STORED_TRUE_VALUE}
+        define_method("#{flag}?")     {(self[field] || {})[flag.to_s] == STORED_TRUE_VALUE}
+        define_method("not_#{flag}")  {(self[field] || {})[flag.to_s] != STORED_TRUE_VALUE}
+        define_method("not_#{flag}?") {(self[field] || {})[flag.to_s] != STORED_TRUE_VALUE}
         define_method("#{flag}=")     {|val| set_hstore_flag_field(field, flag, val)}
 
         unless opts[:scopes] == false
-          scope "#{flag}",     where("defined(#{table_field}, '#{flag}') IS TRUE")
-          scope "not_#{flag}", where("defined(#{table_field}, '#{flag}') IS NOT TRUE")
+          scope "#{flag}", -> { where("defined(#{table_field}, '#{flag}') IS TRUE") }
+          scope "not_#{flag}", -> { where("defined(#{table_field}, '#{flag}') IS NOT TRUE") }
 
           class_eval <<-EVAL
             def self.#{flag}_condition
