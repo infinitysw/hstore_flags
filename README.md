@@ -19,6 +19,11 @@ Usage
 -----
 
 ```ruby
+# Add hstore flags column to your table in a migration
+def change
+  add_column :shipments, :flags, :hstore
+end
+
 # defining flags
 class User < ActiveRecord::Base
   hstore_flags :active, :admin
