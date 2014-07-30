@@ -16,6 +16,13 @@ class UserMultiFlags < ActiveRecord::Base
 end
 
 describe HStoreFlags do
+
+  it "shows available hstore flags" do
+    expect(User::AVAILABLE_FLAGS).to eq [:fighter, :lover]
+    expect(UserMultiFlags::AVAILABLE_MORE_FLAGS).to eq [:drinker, :smoker, :bartender]
+    expect { User::AVAILABLE_MORE_FLAGS }.to raise_error
+  end
+
   it "creates accessors for flags" do
     u = User.new(fighter: true)
     expect(u.fighter).to eq(true)

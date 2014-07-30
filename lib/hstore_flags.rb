@@ -33,6 +33,12 @@ module HStoreFlags
       field = opts[:field] || "flags"
       table_field = "#{self.table_name}." + field
 
+      #const_set('TEST', 'fubar')
+
+      class_exec do
+        const_set("AVAILABLE_#{field.upcase}", args)
+      end
+
       args.each do |flag|
         define_method("#{flag}")      {(self[field] || {})[flag.to_s] == STORED_TRUE_VALUE}
         define_method("#{flag}?")     {(self[field] || {})[flag.to_s] == STORED_TRUE_VALUE}
